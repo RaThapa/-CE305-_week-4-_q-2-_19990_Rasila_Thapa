@@ -1,0 +1,26 @@
+def floating_model(floating_dec):
+    sign_bit = "1" if floating_dec < 0 else "0"
+    integer_part = abs(int(floating_dec))
+    fractional_part = abs(floating_dec) - integer_part
+    binary_integer = bin(integer_part)[2:]
+    
+    exponent = len(binary_integer)
+    if exponent == 0:
+        exponent = -1  # Denormalized number
+    exponent_bits = bin(exponent + 15)[2:].zfill(5)
+    
+    fractional_bits = ""
+    for _ in range(8):
+        fractional_part *= 2
+        bit = "1" if fractional_part >= 1 else "0"
+        fractional_bits += bit
+        if bit == "1":
+            fractional_part -= 1
+    
+    binary_representation = f"{sign_bit}{exponent_bits}{fractional_bits}"
+    return binary_representation
+
+# Example:
+floating_dec = -26.625
+binary_representation = floating_model(floating_dec)
+print(binary_representation)
